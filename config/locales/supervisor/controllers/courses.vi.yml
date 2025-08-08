@@ -55,3 +55,11 @@ vi:
         end_date: "Ngày kết thúc"
         status: "Trạng thái"
         actions: "Hành động"
+      add_subject:
+        subject_not_found: "Không tìm thấy môn học"
+        subject_already_added: "Môn học này đã được thêm vào khóa học"
+        subject_added_successfully: "Môn học '%{subject_name}' đã được thêm vào khóa học thành công"
+        failed_to_add_subject: "Không thể thêm môn học vào khóa học"
+      update:
+        course_updated_successfully: "Khóa học đã được cập nhật thành công"
+        course_update_failed: "Không thể cập nhật khóa học"

@@ -1,0 +1,288 @@
+<div class="subject-edit-card" data-subject-id="<%= course_subject.id %>">
+  <div class="subject-edit-header">
+    <div class="subject-position">
+      <label class="position-label">[<%= index + 1 %>]</label>
+      <input type="hidden" name="course[course_subjects_attributes][<%= index %>][id]" value="<%= course_subject.id %>">
+      <input type="hidden" name="course[course_subjects_attributes][<%= index %>][position]" value="<%= course_subject.position || index + 1 %>" class="position-input">
+    </div>
+    
+    <div class="subject-status-indicator">
+      <span class="status-badge status-<%= subject_status(course_subject) %>">
+        <%= t("courses.subjects.subject_status.#{subject_status(course_subject)}") %>
+      </span>
+    </div>
+    
+    <div class="subject-drag-handle">
+      <i class="fas fa-grip-vertical"></i>
+    </div>
+  </div>
+
+  <div class="subject-edit-content">
+    <div class="subject-basic-info">
+      <div class="subject-dates">
+        <%= course_subject.start_date&.strftime(Settings.formats.date) %> → 
+        <%= course_subject.finish_date&.strftime(Settings.formats.date) %>
+      </div>
+      <div class="subject-name">
+        <strong><%= course_subject.subject.name %></strong>: 
+        <%= t("courses.subjects.time_to_finish", days: course_subject.subject.estimated_time_days || 0) %>
+      </div>
+    </div>
+
+    <div class="subject-actions-edit">
+      <button type="button" class="btn btn-outline-primary btn-sm" disabled>
+        <%= t("courses.edit.edit_subject_content") %>
+      </button>
+    </div>
+  </div>
+
+  <div class="tasks-edit-section">
+    <div class="tasks-preview-header">
+      <h6><%= t("courses.subjects.tasks_preview") %></h6>
+      <button type="button" class="btn btn-outline-success btn-sm toggle-task-form" data-subject-id="<%= course_subject.id %>">
+        <%= t("courses.edit.fill_more_tasks") %>
+      </button>
+    </div>
+
+    <div class="existing-tasks">
+      <% course_subject.tasks.each do |task| %>
+        <div class="task-item">
+          <span class="task-bullet">•</span>
+          <span class="task-name"><%= task.name %></span>
+        </div>
+      <% end %>
+      <% if course_subject.tasks.empty? %>
+        <div class="no-tasks">
+          <em><%= t("courses.subjects.no_tasks") %></em>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="new-tasks-form" id="tasks-form-<%= course_subject.id %>" style="display: none;">
+      <div class="new-tasks-container">
+        <div class="new-task-template" style="display: none;">
+          <div class="new-task-item">
+            <div class="form-row">
+              <div class="col-md-11">
+                <input type="text"
+                       name="course[course_subjects_attributes][<%= index %>][tasks_attributes][NEW_TASK_INDEX][name]"
+                       placeholder="<%= t('courses.edit.add_task_placeholder') %>"
+                       class="form-control form-control-sm" disabled="disabled">
+              </div>
+              <div class="col-md-1">
+                <button type="button" class="btn btn-outline-danger btn-sm remove-task">
+                  <%= t("courses.edit.remove_task") %>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="new-tasks-list"></div>
+        
+        <div class="add-task-controls">
+          <button type="button" class="btn btn-outline-primary btn-sm add-new-task" data-subject-id="<%= course_subject.id %>">
+            <i class="fas fa-plus"></i> <%= t("courses.edit.add_task_button") %>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.subject-edit-card {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: box-shadow 0.2s ease;
+}
+
+.subject-edit-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.subject-edit-card.ui-sortable-helper {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  transform: rotate(2deg);
+}
+
+.subject-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.subject-position {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.position-label {
+  font-weight: bold;
+  color: #007bff;
+  font-size: 16px;
+  margin: 0;
+}
+
+.subject-drag-handle {
+  cursor: move;
+  color: #6c757d;
+  font-size: 18px;
+}
+
+.subject-drag-handle:hover {
+  color: #495057;
+}
+
+.subject-edit-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.subject-basic-info {
+  flex: 1;
+}
+
+.subject-dates {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 8px;
+}
+
+.subject-name {
+  font-size: 16px;
+  color: #495057;
+}
+
+.subject-actions-edit {
+  flex-shrink: 0;
+}
+
+.tasks-edit-section {
+  border-top: 1px solid #e9ecef;
+  padding-top: 15px;
+}
+
+.tasks-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.tasks-preview-header h6 {
+  margin: 0;
+  color: #495057;
+}
+
+.existing-tasks {
+  margin-bottom: 15px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 5px 0;
+}
+
+.task-bullet {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.task-name {
+  flex: 1;
+  color: #495057;
+}
+
+.task-description {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.no-tasks {
+  padding: 15px;
+  text-align: center;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.new-tasks-form {
+  border-top: 1px solid #e9ecef;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.new-task-item {
+  margin-bottom: 10px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.add-task-controls {
+  margin-top: 15px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-not_started {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.status-in_progress {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-finished {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+@media (max-width: 768px) {
+  .subject-edit-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .tasks-preview-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-row > div {
+    width: 100%;
+  }
+}
+</style>
+
+

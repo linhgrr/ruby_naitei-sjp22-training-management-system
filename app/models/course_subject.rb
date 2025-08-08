@@ -5,16 +5,15 @@ class CourseSubject < ApplicationRecord
   has_many :tasks, as: :taskable, dependent: :destroy
   has_many :user_subjects, dependent: :destroy
 
+  accepts_nested_attributes_for :tasks, allow_destroy: true,
+reject_if: :all_blank
+
+  # Position management with acts_as_list
+  acts_as_list scope: :course
+
   # Validations
   validates :course_id, uniqueness: {scope: :subject_id}
-  validates :position, presence: true,
-            numericality: {
-              only_integer: true,
-              greater_than_or_equal_to: Settings.course_subject.min_position,
-              allow_blank: true
-            }
   validate :finish_date_after_start_date
-  validates :position, uniqueness: {scope: :course_id}
 
   # Scopes
   scope :ordered_by_position, -> {order(:position)}

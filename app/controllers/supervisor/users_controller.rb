@@ -3,7 +3,7 @@ class Supervisor::UsersController < Supervisor::BaseController
                 only: %i(index show update_status bulk_deactivate)
   before_action :load_courses, only: %i(index)
   before_action :load_trainees, only: %i(index)
-  before_action :load_trainee, only: %i(update_status)
+  before_action :load_trainee, only: %i(show update_status)
   before_action :set_css_class, only: %i(index)
   before_action :require_manager
   skip_before_action :check_supervisor_role
@@ -13,13 +13,16 @@ class Supervisor::UsersController < Supervisor::BaseController
   end
 
   # GET /supervisor/users/:id
-  def show; end
+  def show
+    @user = @user_trainee
+    render template: "users/show"
+  end
 
   # PATCH /supervisor/users/:id/update_status
   def update_status
     flash[:success] = t(".update_success") if update_status?
 
-    redirect_to
+    redirect_to supervisor_users_path
   end
 
   # PATCH /supervisor/users/bulk_deactivate

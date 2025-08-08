@@ -55,3 +55,11 @@ en:
         end_date: "End Date"
         status: "Status"
         actions: "Actions"
+      add_subject:
+        subject_not_found: "Subject not found"
+        subject_already_added: "Subject is already added to this course"
+        subject_added_successfully: "Subject '%{subject_name}' has been added to the course successfully"
+        failed_to_add_subject: "Failed to add subject to the course"
+      update:
+        course_updated_successfully: "Course was updated successfully"
+        course_update_failed: "Failed to update course"

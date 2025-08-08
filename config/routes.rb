@@ -15,16 +15,12 @@ Rails.application.routes.draw do
     resources :password_resets, only: %i(new create edit update)
     resources :users, only: %i(show edit update)
 
-    resources :courses, only: %i(index show) do
-      member do
-        get :members
-        get :subjects
-      end
-    end
+    # Subject search API (accessible to all authenticated users)
+    resources :subjects, only: :index
 
     # --- Trainee Namespace ---
     namespace :trainee do
-      resources :daily_reports, only: %i(index show new create edit update)
+      resources :daily_reports, only: %i(index show new create edit update destroy)
 
       resources :courses, only: %i(show) do
         member do
@@ -43,15 +39,14 @@ Rails.application.routes.draw do
           delete :destroy_document, path: "document"
         end
       end
-      resources :daily_reports
     end
 
     # --- Supervisor Namespace ---
     namespace :supervisor do
       resources :daily_reports, only: %i(index show)
-      resources :subjects, only: %i(index show destroy new create)
-      resources :tasks, only: %i(index show destroy new create)
-      resources :categories, only: %i(index show destroy new create)
+      resources :subjects, only: %i(index show destroy new create edit update)
+      resources :tasks, only: %i(index show destroy new create edit update)  
+      resources :categories, only: %i(index show destroy new create edit update)
       resources :users, only: %i(index show) do
         member do
           patch :update_status
@@ -60,12 +55,13 @@ Rails.application.routes.draw do
           patch :bulk_deactivate
         end
       end
-      resources :courses do
+      resources :courses, only: %i(index show new create edit update) do
         member do
           get :members
           get :subjects
           get :supervisors
           delete :leave
+          post :add_subject
         end
         resources :user_courses, only: [:destroy]
         resources :supervisors, only: [:destroy]
@@ -78,12 +74,7 @@ Rails.application.routes.draw do
     # --- Admin Namespace ---
     namespace :admin do
       resources :dashboards
-      resources :users
-      resources :subjects
-      resources :categories
       resources :daily_reports, only: %i(index show)
-
-
     end
   end
 end

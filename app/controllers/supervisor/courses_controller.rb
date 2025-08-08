@@ -7,7 +7,9 @@ class Supervisor::CoursesController < Supervisor::BaseController
     {user_subjects: [:user, :comments]}
   ].freeze
 
-  before_action :load_course, only: %i(show members subjects supervisors leave)
+  before_action :load_course,
+                only: %i(show members subjects supervisors leave edit update
+add_subject)
   before_action :authorize_supervisor_access!, except: [:index]
   before_action :ensure_multiple_supervisors, only: [:leave]
   before_action :set_courses_page_class
@@ -48,6 +50,7 @@ class Supervisor::CoursesController < Supervisor::BaseController
   # GET /supervisor/courses/:id/subjects
   def subjects
     @subjects = @course.course_subjects.includes(EAGER_LOAD_SUBJECTS)
+                       .ordered_by_position
     @subject_count = @subjects.count
     @trainee_count = @course.trainees_count
     @trainer_count = @course.supervisors.count
@@ -93,7 +96,80 @@ class Supervisor::CoursesController < Supervisor::BaseController
     @course.course_subjects.build.build_subject
   end
 
+  # GET /supervisor/courses/:id/edit
+  def edit
+    @subjects = @course.course_subjects.includes(:subject, :tasks)
+                       .ordered_by_position
+    render template: "courses/edit"
+  end
+
+  # PATCH /supervisor/courses/:id
+  def update
+    if @course.update(course_params)
+      flash[:success] = t(".course_updated_successfully")
+      redirect_to subjects_supervisor_course_path(@course)
+    else
+      @course.reload
+      @subjects = @course.course_subjects.includes(:subject, :tasks)
+                         .ordered_by_position
+      flash[:danger] = t(".course_update_failed")
+      render template: "courses/edit", status: :unprocessable_entity
+    end
+  end
+
+  # POST /supervisor/courses/:id/add_subject
+  def add_subject
+    subject_id = params[:subject_id]
+    subject = Subject.find_by(id: subject_id)
+
+    unless subject
+      render json: {
+        success: false,
+        message: t(".subject_not_found")
+      }, status: :not_found
+      return
+    end
+
+    # Check if subject is already in course
+    if @course.subjects.include?(subject)
+      render json: {
+        success: false,
+        message: t(".subject_already_added")
+      }, status: :unprocessable_entity
+      return
+    end
+
+    # Add subject to course with next position
+    next_position = @course.course_subjects.maximum(:position).to_i + 1
+    course_subject = @course.course_subjects.build(
+      subject: subject,
+      position: next_position
+    )
+
+    if course_subject.save
+      copy_subject_tasks_to_course_subject(subject, course_subject)
+
+      render json: {
+        success: true,
+        message: t(".subject_added_successfully", subject_name: subject.name)
+      }
+    else
+      render json: {
+        success: false,
+        message: t(".failed_to_add_subject")
+      }, status: :unprocessable_entity
+    end
+  end
+
   private
+
+  def copy_subject_tasks_to_course_subject subject, course_subject
+    subject.tasks.each do |subject_task|
+      course_subject.tasks.create!(
+        name: subject_task.name
+      )
+    end
+  end
 
   def course_params
     params.require(:course).permit Course::COURSE_PARAMS
@@ -113,7 +189,9 @@ class Supervisor::CoursesController < Supervisor::BaseController
   end
 
   def load_course
-    @course = Course.find_by id: params[:id]
+    @course = Course.includes(course_subjects: [:subject, :tasks,
+:user_subjects])
+                    .find_by(id: params[:id])
     return if @course
 
     flash[:danger] = I18n.t("courses.errors.course_not_found")

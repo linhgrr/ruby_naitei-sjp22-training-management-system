@@ -28,3 +28,8 @@ en:
       subjects: "Subjects"
       tasks: "Tasks"
       categories: "Categories"
+    error_messages:
+      course_edit:
+        failed: "Failed to update course"
+        success: "Course updated successfully"
+        finish_date_after_start_date: "Finish date must be after start date"

@@ -185,10 +185,12 @@ templates:
   courses:
     members: "courses/members"
     subjects: "courses/subjects"
+    edit: "courses/edit"
 
 ui_limits:
   subject_tasks_preview_count: 3
   trainee_manager: "trainee-manager-page"
+  subject_search_limit: 10
 
 defaults:
   count: 0

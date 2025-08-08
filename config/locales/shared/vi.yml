@@ -28,3 +28,8 @@ vi:
       subjects: "Môn học"
       tasks: "Nhiệm vụ"
       categories: "Danh mục"
+    error_messages:
+      course_edit:
+        failed: "Lỗi khi cập nhật khóa học"
+        success: "Khóa học đã được cập nhật thành công"
+        finish_date_after_start_date: "Ngày kết thúc phải sau ngày bắt đầu"

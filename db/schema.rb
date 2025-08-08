@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_14_125035) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_14_174048) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -43,7 +43,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_14_125035) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
   create_table "comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -66,7 +65,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_14_125035) do
     t.date "finish_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["course_id", "position"], name: "index_course_subjects_on_course_id_and_position", unique: true
     t.index ["course_id", "subject_id"], name: "index_course_subjects_on_course_id_and_subject_id", unique: true
     t.index ["course_id"], name: "index_course_subjects_on_course_id"
     t.index ["subject_id"], name: "index_course_subjects_on_subject_id"
@@ -127,7 +125,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_14_125035) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.index ["deleted_at"], name: "index_subjects_on_deleted_at"
-    t.index ["name"], name: "index_subjects_on_name", unique: true
   end
 
   create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

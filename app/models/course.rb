@@ -6,7 +6,8 @@ class Course < ApplicationRecord
     :link_to_course,
     :image,
     {supervisor_ids: []},
-    {course_subjects_attributes: [:id, :subject_id, :position, :_destroy]}
+    {course_subjects_attributes: [:id, :subject_id, :position, :_destroy,
+                                   {tasks_attributes: [:id, :name, :description, :_destroy]}]}
   ].freeze
   IMAGE_DISPLAY_SIZE = [120, 80].freeze
   URL_FORMAT = %r{\Ahttps://.*}
@@ -32,7 +33,6 @@ class Course < ApplicationRecord
   accepts_nested_attributes_for :course_subjects, allow_destroy: true
 
   # Validations
-  before_validation :validate_and_normalize_positions
   validates :name, presence: true,
             length: {
               maximum: Settings.course.max_name_length
@@ -176,33 +176,6 @@ class Course < ApplicationRecord
     return if finish_date.between?(1.year.ago.to_date, 1.year.from_now.to_date)
 
     errors.add(:finish_date, :must_be_within_one_year_from_now)
-  end
-
-  def filter_and_get_positions
-    course_subjects.reject(&:marked_for_destruction?).map(&:position)
-  end
-
-  def validate_unique_positions positions
-    duplicates = positions.select {|v| positions.count(v) > 1}.uniq
-    errors.add(:base, :must_be_unique) if duplicates.any?
-  end
-
-  def normalize_positions
-    subjects = course_subjects.reject(&:marked_for_destruction?)
-    subjects.sort_by(&:position)
-            .each_with_index do |cs, index|
-      cs.position = index + 1
-    end
-  end
-
-  def validate_and_normalize_positions
-    positions = filter_and_get_positions
-    return if positions.any?(&:blank?)
-
-    validate_unique_positions(positions)
-    return if errors.any?
-
-    normalize_positions
   end
 
   def clone_tasks_for_course

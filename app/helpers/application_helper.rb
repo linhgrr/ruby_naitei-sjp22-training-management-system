@@ -91,6 +91,12 @@ module ApplicationHelper
     Settings.subject_status.not_started
   end
 
+  def format_date_for_input date
+    return "" unless date
+
+    date.strftime("%Y-%m-%d")
+  end
+
   private
 
   def subject_finished? course_subject

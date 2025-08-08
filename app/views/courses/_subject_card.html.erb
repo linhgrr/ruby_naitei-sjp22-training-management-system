@@ -31,10 +31,10 @@
           <%= t("courses.subjects.actions") %>
         </button>
         <ul class="dropdown-menu">
-          <% if is_admin %>
+          <% if is_admin || is_supervisor %>
             <li>
               <%= link_to t("courses.subjects.edit"), 
-                  edit_admin_subject_path(course_subject.subject), 
+                  edit_supervisor_subject_path(course_subject.subject), 
                   class: "dropdown-item" %>
             </li>
           <% end %>
