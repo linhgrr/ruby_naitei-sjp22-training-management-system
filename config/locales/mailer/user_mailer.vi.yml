@@ -1,0 +1,23 @@
+vi:
+  user_mailer:
+    password_reset:
+      title: "Đặt lại mật khẩu"
+      instruction: "Để đặt lại mật khẩu, hãy nhấp vào liên kết bên dưới:"
+      reset_button: "Đặt lại mật khẩu"
+      expiry_notice: "Liên kết này sẽ hết hạn trong hai giờ."
+      ignore_message: "Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này và mật khẩu của bạn sẽ giữ nguyên."
+      instruction_text: "Để đặt lại mật khẩu, hãy nhấp vào liên kết bên dưới:"
+      expiry_notice_text: "Liên kết này sẽ hết hạn trong hai giờ."
+      ignore_message_text: "Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này và mật khẩu của bạn sẽ giữ nguyên."
+    password_changed:
+      title: "Mật khẩu đã được thay đổi"
+      message: "Mật khẩu của bạn đã được thay đổi thành công."
+      login_button: "Đăng nhập"
+      security_notice: "Nếu bạn không thay đổi mật khẩu, vui lòng liên hệ với chúng tôi ngay lập tức."
+      message_text: "Mật khẩu của bạn đã được thay đổi thành công."
+      security_notice_text: "Nếu bạn không thay đổi mật khẩu, vui lòng liên hệ với chúng tôi ngay lập tức."
+    account_activation:
+      app_name: "Ứng dụng mẫu"
+      greeting: "Xin chào %{name},"
+      welcome_message: "Chào mừng đến với ứng dụng mẫu! Nhấp vào liên kết bên dưới để kích hoạt tài khoản của bạn:"
+      activate_button: "Kích hoạt"

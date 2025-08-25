@@ -4,6 +4,7 @@ vi:
     not_authorized: "Bạn không có quyền thực hiện hành động này."
     user_not_found: "Người dùng không tồn tại."
     already_logged_in: "Bạn đã đăng nhập rồi"
+    close: "Đóng"
     action: "Hành động"
     filter:
       select_course_placeholder: "Chọn Khóa học"

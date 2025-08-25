@@ -4,6 +4,7 @@ en:
     not_authorized: "You are not authorized to perform this action."
     user_not_found: "User not found."
     already_login: "Already logged in"
+    close: "Close"
     action: "Actions"
     filter:
       select_course_placeholder: "Select Course"
@@ -29,11 +30,11 @@ en:
       tasks: "Tasks"
       categories: "Categories"
     subject_row_fields:
-        position: "Position"
-        delete: "Delete"
+      position: "Position"
+      delete: "Delete"
     course_subject_row_field:
-        position: "Position"
-        delete: "Delete"
+      position: "Position"
+      delete: "Delete"
     error_messages:
       course_edit:
         failed: "Failed to update course"
