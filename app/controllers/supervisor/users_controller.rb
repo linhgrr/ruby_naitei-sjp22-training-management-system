@@ -10,11 +10,13 @@ class Supervisor::UsersController < Supervisor::BaseController
 
   # GET supervisor/users
   def index
+    authorize! :read, User
     @pagy, @trainees = pagy(@user_trainees)
   end
 
   # GET /supervisor/users/:id
   def show
+    authorize! :read, @user_trainee
     @trainee_courses = @user_trainee.courses
                                     .includes([:supervisors])
                                     .includes(user_courses: [:user_subjects])
@@ -26,18 +28,21 @@ class Supervisor::UsersController < Supervisor::BaseController
 
   # PATCH /supervisor/users/:id/update_status
   def update_status
+    authorize! :update, @user_trainee
     flash[:success] = t(".update_success") if handle_update_status?
     redirect_to session.delete(:forwarding_url) || supervisor_users_path
   end
 
   # PATCH /supervisor/users/bulk_deactivate
   def bulk_deactivate
+    authorize! :update, User
     handle_bulk_statuses
     redirect_to supervisor_users_path
   end
 
   # PATCH /supervisor/users/:id/update_user_course_status
   def update_user_course_status
+    authorize! :update, @user_trainee
     flash[:success] = t(".update_success") if update_user_course_status?
 
     redirect_to supervisor_user_path(@user_trainee)
@@ -45,6 +50,7 @@ class Supervisor::UsersController < Supervisor::BaseController
 
   # PATCH /supervisor/users/:id/delete_user_course
   def delete_user_course
+    authorize! :update, @user_trainee
     flash[:success] = t(".delete_success") if delete_user_course?
 
     redirect_to supervisor_user_path(@user_trainee)
@@ -52,6 +58,7 @@ class Supervisor::UsersController < Supervisor::BaseController
 
   # PATCH /supervisor/users/:id/update
   def update
+    authorize! :update, @user_trainee
     if @user_trainee.update(user_params)
       flash[:success] = t(".update_success")
       redirect_to supervisor_user_path(@user_trainee)

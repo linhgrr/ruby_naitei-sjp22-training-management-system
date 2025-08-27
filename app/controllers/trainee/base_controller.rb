@@ -1,10 +1,10 @@
 class Trainee::BaseController < ApplicationController
-  before_action :check_trainee_role
+  before_action :authorize_trainee
+  check_authorization
 
-  def check_trainee_role
-    return if current_user&.trainee?
+  private
 
-    flash[:danger] = t("messages.permission_denied")
-    redirect_to root_path
+  def authorize_trainee
+    authorize! :access, :trainee
   end
 end

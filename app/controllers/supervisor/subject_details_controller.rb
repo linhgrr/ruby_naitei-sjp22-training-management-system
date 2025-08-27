@@ -25,6 +25,7 @@ update_score show)
 
   # POST /admin/courses/:course_id/subjects/:id/create_task
   def create_task
+    authorize! :update, @course_subject
     flash[:success] = t(".create_success") if handle_create_task?
 
     redirect_to supervisor_course_subject_detail_path(@course_subject.course,
@@ -33,6 +34,7 @@ update_score show)
 
   # PATCH /admin/courses/:course_id/subjects/:id/update_task
   def update_task
+    authorize! :update, @course_subject
     flash[:success] = t(".update_success") if handle_update_task?
 
     redirect_to supervisor_course_subject_detail_path(@course_subject.course,
@@ -41,6 +43,7 @@ update_score show)
 
   # PATCH /admin/courses/:course_id/subjects/:id/update_score
   def update_score
+    authorize! :update, @course_subject
     flash[:success] = t(".update_success") if handle_update_score?
 
     redirect_to supervisor_course_subject_detail_path(@course_subject.course,
@@ -49,6 +52,7 @@ update_score show)
 
   # POST /admin/courses/:course_id/subjects/:id/create_comment
   def create_comment
+    authorize! :update, @course_subject
     flash[:success] = t(".create_success") if handle_create_comment?
 
     redirect_to supervisor_course_subject_detail_path(@course_subject.course,
@@ -57,6 +61,7 @@ update_score show)
 
   # DELETE /admin/courses/:course_id/subjects/:id/destroy_comment
   def destroy_comment
+    authorize! :update, @course_subject
     flash[:success] = t(".destroy_success") if handle_destroy_comment?
 
     redirect_to supervisor_course_subject_detail_path(@course_subject.course,
@@ -65,6 +70,7 @@ update_score show)
 
   # PATCH /admin/courses/:course_id/subjects/:id/update_comment
   def update_comment
+    authorize! :update, @course_subject
     flash[:success] = t(".update_success") if handle_update_comment?
 
     redirect_to supervisor_course_subject_detail_path(@course_subject.course,

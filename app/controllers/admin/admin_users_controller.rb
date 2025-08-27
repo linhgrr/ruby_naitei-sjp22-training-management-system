@@ -1,6 +1,9 @@
 class Admin::AdminUsersController < Admin::BaseController
   before_action :load_admin, only: %i(show destroy activate deactivate)
   before_action :load_supervisor, only: :promote
+  before_action :authorize_user_read, only: %i(index show)
+  before_action :authorize_user_update,
+                only: %i(activate deactivate destroy promote)
 
   # GET /admin/admin_users
   def index
@@ -79,6 +82,13 @@ class Admin::AdminUsersController < Admin::BaseController
   end
 
   private
+  def authorize_user_read
+    authorize! :read, User
+  end
+
+  def authorize_user_update
+    authorize! :update, User
+  end
 
   def load_supervisor
     @supervisor = User.find_by(id: params[:supervisor_id], role: :supervisor)

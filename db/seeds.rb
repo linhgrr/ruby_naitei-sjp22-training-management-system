@@ -220,7 +220,7 @@ ActiveRecord::Base.transaction do
       user.gender = Settings.user.genders.male
       user.birthday = 30.years.ago
       user.activated = true
-      user.activated_at = Time.zone.now
+      user.confirmed_at = Time.zone.now
     end
   end
   20.times do |n|
@@ -232,7 +232,7 @@ ActiveRecord::Base.transaction do
       user.gender = User.genders.keys.sample
       user.birthday = Faker::Date.birthday(min_age: 28, max_age: 50)
       user.activated = true
-      user.activated_at = Time.zone.now
+      user.confirmed_at = Time.zone.now
     end
   end
   200.times do |n|
@@ -244,7 +244,7 @@ ActiveRecord::Base.transaction do
       user.gender = User.genders.keys.sample
       user.birthday = Faker::Date.birthday(min_age: 20, max_age: 24)
       user.activated = true
-      user.activated_at = Time.zone.now
+      user.confirmed_at = Time.zone.now
     end
   end
   supervisors = User.supervisor.to_a

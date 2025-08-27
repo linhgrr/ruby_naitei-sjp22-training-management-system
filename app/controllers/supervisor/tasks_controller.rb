@@ -1,4 +1,6 @@
 class Supervisor::TasksController < Supervisor::BaseController
+  before_action :authorize_task_read, only: %i(index show)
+  before_action :authorize_task_update, only: %i(new create edit update destroy)
   before_action :load_task, only: %i(destroy show edit update)
 
   # GET /supervisor/tasks
@@ -57,6 +59,13 @@ class Supervisor::TasksController < Supervisor::BaseController
   end
 
   private
+  def authorize_task_read
+    authorize! :read, Task
+  end
+
+  def authorize_task_update
+    authorize! :update, Task
+  end
 
   def task_params
     params.require(:task).permit Task::TASK_PERMITTED_PARAMS

@@ -1,10 +1,10 @@
 class Supervisor::BaseController < ApplicationController
-  before_action :check_supervisor_role
+  before_action :authorize_supervisor
+  check_authorization
 
-  def check_supervisor_role
-    return if current_user&.supervisor? || current_user&.admin?
+  private
 
-    flash[:danger] = t("messages.permission_denied")
-    redirect_to root_path
+  def authorize_supervisor
+    authorize! :access, :supervisor
   end
 end

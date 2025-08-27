@@ -19,11 +19,13 @@ class Trainee::CoursesController < Trainee::BaseController
 
   # GET /trainee/courses/:id
   def show
+    authorize! :read, @course
     redirect_to subjects_trainee_course_path @course
   end
 
   # GET /trainee/courses/:id/members
   def members
+    authorize! :members, @course
     @trainers = @course.supervisors.includes :user_courses
     @pagy, @trainees = pagy(@course.user_courses.trainees,
                             limit: Settings.pagination.course_members_per_page)
@@ -34,6 +36,7 @@ class Trainee::CoursesController < Trainee::BaseController
 
   # GET /trainee/courses/:id/subjects
   def subjects
+    authorize! :subjects, @course
     @course_subjects = @course.course_subjects
                               .includes(COURSE_SUBJECTS_PRELOAD)
                               .ordered_by_position

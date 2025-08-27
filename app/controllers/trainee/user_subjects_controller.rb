@@ -5,6 +5,7 @@ class Trainee::UserSubjectsController < Trainee::BaseController
 
   # PATCH /trainee/user_subjects/:id
   def update
+    authorize! :update, @user_subject
     normalize_finish_params!
     success = update?
     flash[:success] = t(".update_success") if success

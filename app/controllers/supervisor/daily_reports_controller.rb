@@ -1,6 +1,7 @@
 class Supervisor::DailyReportsController < Supervisor::BaseController
   # GET supervisor/daily_reports
   def index
+    authorize! :read, DailyReport
     supervised_course_ids = current_user.supervised_courses.pluck(:id)
 
     all_reports = DailyReport.recent.includes(DailyReport::EAGER_LOADING_PARAMS)
@@ -14,6 +15,7 @@ class Supervisor::DailyReportsController < Supervisor::BaseController
 
   # GET supervisor/daily_reports/:id
   def show
+    authorize! :read, DailyReport
     @daily_report = DailyReport.submitted.find_by(id: params[:id],
                                                   course_id: current_user
                                                   .supervised_courses

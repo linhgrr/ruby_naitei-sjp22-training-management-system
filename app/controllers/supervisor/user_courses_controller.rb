@@ -1,4 +1,5 @@
 class Supervisor::UserCoursesController < Supervisor::BaseController
+  before_action :authorize_user_course_update, only: %i(destroy create)
   before_action :load_course
   before_action :load_user_course, only: %i(destroy)
 
@@ -29,6 +30,9 @@ class Supervisor::UserCoursesController < Supervisor::BaseController
   end
 
   private
+  def authorize_user_course_update
+    authorize! :update, UserCourse
+  end
 
   def add_trainees_to_course trainees
     created_count = 0

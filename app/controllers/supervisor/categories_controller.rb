@@ -1,4 +1,7 @@
 class Supervisor::CategoriesController < Supervisor::BaseController
+  before_action :authorize_category_read, only: %i(index show)
+  before_action :authorize_category_update,
+                only: %i(new create edit update destroy)
   before_action :load_category, only: %i(show edit update destroy)
   before_action :load_subject_categories, only: %i(show edit update)
 
@@ -57,6 +60,13 @@ class Supervisor::CategoriesController < Supervisor::BaseController
   end
 
   private
+  def authorize_category_read
+    authorize! :read, Category
+  end
+
+  def authorize_category_update
+    authorize! :update, Category
+  end
 
   def load_category
     base_scope = Category.all
