@@ -16,19 +16,19 @@
 
   <body class="<%= @page_class %>">
     <%= render "layouts/header" %>
-    <div class= "<%= logged_in? ? "app-container-wrapper" : "app-container" %>">
-      <% if logged_in? && current_user.trainee? %>
+    <div class= "<%= user_signed_in? ? "app-container-wrapper" : "app-container" %>">
+      <% if user_signed_in? && current_user.trainee? %>
         <%= render "trainee/base/sidebar" %>
-      <% elsif logged_in? && current_user.admin? %>
+      <% elsif user_signed_in? && current_user.admin? %>
         <%= render "admin/base/sidebar" %>
-      <% elsif logged_in? && current_user.supervisor? %>
+      <% elsif user_signed_in? && current_user.supervisor? %>
         <%= render "supervisor/base/sidebar" %>
       <% end %>
       <main class="main-content">
         <div class="container">
           <% flash.each do |type, message| %>
             <div class="alert alert-<%= type %>">
-              <button type="button" class="close" data-dismiss="alert">×</button>
+              <button type="button" class="close" data-dismiss="alert" aria-label="<%= t('shared.close') %>">×</button>
               <%= message %>
             </div>
           <% end %>

@@ -1,0 +1,23 @@
+en:
+  user_mailer:
+    password_reset:
+      title: "Password Reset"
+      instruction: "To reset your password, click the link below:"
+      reset_button: "Reset Password"
+      expiry_notice: "This link will expire in two hours."
+      ignore_message: "If you did not request your password to be reset, please ignore this email and your password will stay as it is."
+      instruction_text: "To reset your password click the link below:"
+      expiry_notice_text: "This link will expire in two hours."
+      ignore_message_text: "If you did not request your password to be reset, please ignore this email and your password will stay as it is."
+    password_changed:
+      title: "Password Changed"
+      message: "Your password has been changed successfully."
+      login_button: "Login"
+      security_notice: "If you did not change your password, please contact us immediately."
+      message_text: "Your password has been changed successfully."
+      security_notice_text: "If you did not change your password, please contact us immediately."
+    account_activation:
+      app_name: "Sample App"
+      greeting: "Hi %{name},"
+      welcome_message: "Welcome to the Sample App! Click on the link below to activate your account:"
+      activate_button: "Activate"
