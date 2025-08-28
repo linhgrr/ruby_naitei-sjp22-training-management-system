@@ -104,3 +104,6 @@ end
 gem "rails-i18n", "~> 7.0"
 
 gem "config"
+
+# Authorization
+gem "cancancan", "~> 3.6"

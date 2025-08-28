@@ -1,4 +1,8 @@
 class Admin::UsersController < Admin::BaseController
+  before_action :authorize_user_read, only: %i(index show)
+  before_action :authorize_user_update,
+                only: %i(update_status update delete_user_course bulk_deactivate
+add_role_supervisor)
   before_action :load_supervisors, only: %i(index)
   before_action :load_courses, only: %i(index)
   before_action :load_trainees, only: %i(new_supervisor add_role_supervisor)
@@ -66,6 +70,13 @@ class Admin::UsersController < Admin::BaseController
   end
 
   private
+  def authorize_user_read
+    authorize! :read, User
+  end
+
+  def authorize_user_update
+    authorize! :update, User
+  end
 
   def load_trainees
     @user_trainees = User.trainee.filter_by_name(params[:search]).recent

@@ -1,10 +1,10 @@
-class Supervisor::SupervisorsController < ApplicationController
+class Supervisor::SupervisorsController < Supervisor::BaseController
   ERROR_ADD_TRAINERS_FAILED = "Failed to add trainers to course: %<message>s"
                               .freeze
 
-  before_action :authorize_supervisor!
   before_action :load_course
   before_action :load_supervisor, only: %i(destroy)
+  before_action :authorize_course_update, only: %i(create destroy)
 
   # DELETE /supervisor/courses/:course_id/supervisors/:id
   def destroy
@@ -33,6 +33,9 @@ class Supervisor::SupervisorsController < ApplicationController
   end
 
   private
+  def authorize_course_update
+    authorize! :update, Course
+  end
 
   def add_trainers_to_course trainers
     added_count = 0
@@ -77,12 +80,5 @@ class Supervisor::SupervisorsController < ApplicationController
 
     flash[:danger] = I18n.t("courses.errors.supervisor_not_found")
     redirect_back fallback_location: members_supervisor_course_path(@course)
-  end
-
-  def authorize_supervisor!
-    return if current_user&.admin? || current_user&.supervisor?
-
-    flash[:danger] = I18n.t("courses.errors.access_denied")
-    redirect_to root_path
   end
 end

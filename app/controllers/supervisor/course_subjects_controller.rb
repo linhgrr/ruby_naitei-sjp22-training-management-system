@@ -1,4 +1,5 @@
 class Supervisor::CourseSubjectsController < Supervisor::BaseController
+  before_action :authorize_course_subject_update, only: %i(destroy finish)
   before_action :load_course
   before_action :load_course_subject, only: %i(destroy finish)
 
@@ -25,6 +26,9 @@ class Supervisor::CourseSubjectsController < Supervisor::BaseController
   end
 
   private
+  def authorize_course_subject_update
+    authorize! :update, CourseSubject
+  end
 
   def load_course
     @course = Course.find_by(id: params[:course_id])

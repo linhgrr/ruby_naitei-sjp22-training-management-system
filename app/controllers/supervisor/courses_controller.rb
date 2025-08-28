@@ -1,5 +1,9 @@
 class Supervisor::CoursesController < Supervisor::BaseController
   include Supervisor::CoursesHelper
+  before_action :authorize_course_read,
+                only: %i(index show members subjects supervisors)
+  before_action :authorize_course_update,
+                only: %i(create new edit update leave add_subject)
 
   EAGER_LOAD_SUBJECTS = [
     {subject: :image_attachment},
@@ -169,6 +173,13 @@ class Supervisor::CoursesController < Supervisor::BaseController
   end
 
   private
+  def authorize_course_read
+    authorize! :read, Course
+  end
+
+  def authorize_course_update
+    authorize! :update, Course
+  end
 
   def find_available_users
     member_type = determine_member_type

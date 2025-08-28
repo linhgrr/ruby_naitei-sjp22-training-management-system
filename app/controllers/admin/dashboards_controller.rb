@@ -1,6 +1,7 @@
-class Admin::DashboardsController < ApplicationController
+class Admin::DashboardsController < Admin::BaseController
   # GET /admin/dashboards
   def index
+    authorize! :read, :admin
     @overview_stats = {
       trainers: User.supervisor.count,
       trainees: User.trainee.count,

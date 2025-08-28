@@ -5,6 +5,7 @@ destroy_document)
 
   # PATCH /trainee/user_tasks/:id/document
   def update_document
+    authorize! :update, @user_task
     if update_document?
       make_subject_in_progress
       flash[:success] = t(".document_updated")
@@ -15,6 +16,7 @@ destroy_document)
 
   # PATCH /trainee/user_tasks/:id/status
   def update_status
+    authorize! :update, @user_task
     if update_status?
       make_subject_in_progress
       flash[:success] = t(".status_updated")
@@ -24,6 +26,7 @@ destroy_document)
 
   # PATCH /trainee/user_tasks/:id/spent_time
   def update_spent_time
+    authorize! :update, @user_task
     if update_spent_time?
       make_subject_in_progress
       flash[:success] = t(".spent_time_updated")
@@ -34,6 +37,7 @@ destroy_document)
 
   # Delete /trainee/user_tasks/:id/document
   def destroy_document
+    authorize! :update, @user_task
     flash[:success] = t(".document_destroyed") if destroy_document?
 
     redirect_to trainee_course_subject_path(@course_id, @subject_id)

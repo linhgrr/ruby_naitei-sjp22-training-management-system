@@ -1,12 +1,12 @@
 class Admin::BaseController < ApplicationController
-  before_action :check_admin_role
+  before_action :authorize_admin
   before_action :set_count_create_task
+  check_authorization
 
-  def check_admin_role
-    return if current_user&.admin?
+  private
 
-    flash[:danger] = t("messages.permission_denied")
-    redirect_to root_path
+  def authorize_admin
+    authorize! :access, :admin
   end
 
   def set_count_create_task

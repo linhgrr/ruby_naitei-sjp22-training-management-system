@@ -1,4 +1,7 @@
 class Supervisor::SubjectsController < Supervisor::BaseController
+  before_action :authorize_subject_read, only: %i(index show)
+  before_action :authorize_subject_update,
+                only: %i(new create edit update destroy destroy_tasks)
   before_action :load_subject,
                 only: %i(show edit update destroy_tasks destroy)
 
@@ -68,6 +71,13 @@ class Supervisor::SubjectsController < Supervisor::BaseController
   end
 
   private
+  def authorize_subject_read
+    authorize! :read, Subject
+  end
+
+  def authorize_subject_update
+    authorize! :update, Subject
+  end
 
   def subject_params_for_create
     params.require(:subject).permit Subject::SUBJECT_PERMITTED_PARAMS_CREATE

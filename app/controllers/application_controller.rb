@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include Pagy::Backend
   include UserLoadable
   include Devise::Controllers::Helpers
+  include CanCan::ControllerAdditions
 
   protect_from_forgery with: :exception
 
@@ -9,6 +10,11 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :store_user_location
   skip_before_action :authenticate_user!, if: :devise_controller?
+
+  rescue_from CanCan::AccessDenied do |_exception|
+    flash[:danger] = t("messages.permission_denied")
+    redirect_to root_path
+  end
 
   protected
 
